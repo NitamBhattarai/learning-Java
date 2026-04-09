@@ -9,7 +9,7 @@ public class Topic {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Topic(int id, String name, Timestamp createdAt, Timestamp updatedAt, int userId) {
+    public Topic(int id, String name, int userId, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;

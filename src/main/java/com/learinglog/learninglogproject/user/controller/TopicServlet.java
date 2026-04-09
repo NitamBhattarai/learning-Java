@@ -10,14 +10,24 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.List;
 
 @WebServlet("/topic")
 public class TopicServlet extends HttpServlet  {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
         String page = req.getParameter("page");
-        if(page.equals("list")){
+//        if(page.equals("list"))
+       if("list".equals(page))
+        {
+            TopicDao dao = new TopicDao();
+            try {
+                List<Topic> topicsList = dao.fetchTopics();
+                req.setAttribute("topics", topicsList);
+            }catch (Exception e){
+                req.setAttribute("error", e.getMessage());
 
+            }
             req.getRequestDispatcher("/pages/topic-list.jsp").forward(req, res);
         }
         req.getRequestDispatcher("/pages/add-topic.jsp").forward(req, res);
