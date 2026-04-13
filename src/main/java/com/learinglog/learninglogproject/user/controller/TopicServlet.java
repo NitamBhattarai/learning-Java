@@ -29,7 +29,12 @@ public class TopicServlet extends HttpServlet  {
 
             }
             req.getRequestDispatcher("/pages/topic-list.jsp").forward(req, res);
-        }
+        } else if ("edit".equals(page)) {
+           int id = Integer.parseInt(req.getParameter("id"));
+
+           req.getRequestDispatcher("pages/edit-topic.jsp").forward(req, res);
+
+       }
         req.getRequestDispatcher("/pages/add-topic.jsp").forward(req, res);
     }
 

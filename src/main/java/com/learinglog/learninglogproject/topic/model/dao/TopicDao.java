@@ -50,5 +50,26 @@ public class TopicDao {
             return alltopicsList;
             }
 
+
+        }
+public static Topic fetchTopics(int id) throws SQLException{
+        String query = "Select * from topic where id = ?";
+        try(Connection conn = DbConnection.getConnection();
+        PreparedStatement st = conn.prepareStatement(query)) {
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()){
+                String name = rs.getString("name");
+                Timestamp createdAt = rs.getTimestamp("createdat");
+                Timestamp updatedAt = rs.getTimestamp("updatedat");
+                int userId = rs.getInt("user_id")
+
+                Topic obj = new Topic(id, name, userId, createdAt, updatedAt);
+                return obj;
+            }
+            return null;
         }
 }
+
+}
+
