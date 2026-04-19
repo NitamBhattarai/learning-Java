@@ -11,31 +11,30 @@ public class TopicDao {
     public boolean insertTopic(Topic obj) throws SQLException {
         String query =
                 "Insert into topic(name, user_id, createdAt, updatedAt) values (?,?,?,?)";
-        try(Connection conn = DbConnection.getConnection();
-            PreparedStatement st = conn.prepareStatement(query)
-        ){
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(query)
+        ) {
             st.setString(1, obj.getName());
             st.setInt(2, obj.getUserId());
             st.setTimestamp(3, obj.getCreatedAt());
             st.setTimestamp(4, obj.getUpdatedAt());
 
             int rowsInserted = st.executeUpdate();
-            if(rowsInserted==0){
+            if (rowsInserted == 0) {
                 return false;
-            }
-            else {
+            } else {
                 return true;
             }
         }
 
     }
 
-    public List<Topic> fetchTopics() throws SQLException{
+    public List<Topic> fetchTopicsById() throws SQLException {
         String query = "Select * from topic";
-        try(Connection conn = DbConnection.getConnection();
-        PreparedStatement st =conn.prepareStatement(query)){
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(query)) {
             ResultSet rs = st.executeQuery();
-            List<Topic> alltopicsList= new ArrayList<>();
+            List<Topic> alltopicsList = new ArrayList<>();
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
@@ -48,28 +47,47 @@ public class TopicDao {
                 alltopicsList.add(obj);
             }
             return alltopicsList;
-            }
-
-
         }
-public static Topic fetchTopics(int id) throws SQLException{
+
+
+    }
+
+    public static Topic fetchTopicsById(int id) throws SQLException {
         String query = "Select * from topic where id = ?";
-        try(Connection conn = DbConnection.getConnection();
-        PreparedStatement st = conn.prepareStatement(query)) {
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(query)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 String name = rs.getString("name");
                 Timestamp createdAt = rs.getTimestamp("createdat");
                 Timestamp updatedAt = rs.getTimestamp("updatedat");
-                int userId = rs.getInt("user_id")
+                int userId = rs.getInt("user_id");
 
                 Topic obj = new Topic(id, name, userId, createdAt, updatedAt);
                 return obj;
             }
             return null;
         }
-}
+    }
 
+    public static boolean updatedTopic(int id, String name) throws SQLException{
+        String query = "Update topic set name = ? where id = ?";
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(query)){
+            st.setString(1, name);
+            st.setInt(2, id);
+            int rows = st.executeUpdate();
+            if(rows < 0){
+                return true;
+            }
+            else{
+                return false;
+            }
+
+        }
+
+
+    }
 }
 

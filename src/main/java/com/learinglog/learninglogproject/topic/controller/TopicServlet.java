@@ -1,4 +1,4 @@
-package com.learinglog.learninglogproject.user.controller;
+package com.learinglog.learninglogproject.topic.controller;
 
 import com.learinglog.learninglogproject.topic.model.Topic;
 import com.learinglog.learninglogproject.topic.model.dao.TopicDao;
@@ -22,7 +22,7 @@ public class TopicServlet extends HttpServlet  {
         {
             TopicDao dao = new TopicDao();
             try {
-                List<Topic> topicsList = dao.fetchTopics();
+                List<Topic> topicsList = dao.fetchTopicsById();
                 req.setAttribute("topics", topicsList);
             }catch (Exception e){
                 req.setAttribute("error", e.getMessage());
@@ -31,6 +31,18 @@ public class TopicServlet extends HttpServlet  {
             req.getRequestDispatcher("/pages/topic-list.jsp").forward(req, res);
         } else if ("edit".equals(page)) {
            int id = Integer.parseInt(req.getParameter("id"));
+           try{
+               Topic topicObj = TopicDao.fetchTopicsById(id);
+               if(topicObj == null){
+                   req.setAttribute("error", "Unable to fetch topic by id"+id);
+               }
+               else {
+                   req.setAttribute("success", "Successfully fetched the topic");
+                   req.setAttribute("topic", topicObj);
+               }
+           }catch (Exception e){
+               req.setAttribute("error", "Something went wrong"+e.getMessage());
+           }
 
            req.getRequestDispatcher("pages/edit-topic.jsp").forward(req, res);
 

@@ -6,9 +6,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <jsp:include page="/components/header.jsp" />
-
+<h1>Edit Topic</h1>
+<p style="color: red">${error}</p>
+<p style="color: green">${success}</p>
 <form>
-    <input type="text" name="id" value = "${topic-id} randomly">
+    <input type="text" name="id" value = "${topic-id}" randomly>
     <input type="text" name="topic-named" value = "${topic-name} ">
     <button>Update</button>
 </form>
