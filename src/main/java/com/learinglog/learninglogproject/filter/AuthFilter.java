@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.logging.LogRecord;
 
-//@WebFilter("/*")
+@WebFilter("/*")
 public class AuthFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest req = (HttpServletRequest) request;
@@ -21,12 +21,14 @@ public class AuthFilter implements Filter {
 
         boolean isUserLoggedIn = (session != null && session.getAttribute("user") != null);
         boolean isAuthPage = uri.contains("login") || uri.contains("register");
+        boolean isStaticPage = uri.contains("/images/") || uri.contains("/css/");
 
-//        if (isUserLoggedIn && isAuthPage){
-//                res.sendRedirect("/");
-//        }
 
-        if (isUserLoggedIn || isAuthPage){
+        if (isUserLoggedIn && isAuthPage){
+                res.sendRedirect("/");
+        }
+
+        if (isUserLoggedIn || isAuthPage || isStaticPage){
             chain.doFilter(req, res);
     }
         else{
